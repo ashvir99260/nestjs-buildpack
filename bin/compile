@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Install Node.js 20.x using nvm
+echo "-----> Installing Node.js 20.x with nvm"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm install 20
+nvm use 20
+
+# Install Yarn
+echo "-----> Installing Yarn"
+npm install -g yarn
+
+# Install dependencies using Yarn
+echo "-----> Installing application dependencies with Yarn"
+yarn install --production=false
+
+# Run Prisma migrations
+echo "-----> Running Prisma migrations"
+yarn postgres:migrate:deploy 
+yarn prisma:postgres:dbpush 
+yarn prisma:mongo:dbpush 
+yarn prisma:generate:db_clients
+
+# Build the NestJS application (if necessary)
+echo "-----> Building NestJS application"
+yarn build
+
+# Clean up unnecessary dependencies (optional)
+echo "-----> Cleaning up node_modules"
+yarn install --production
+
+echo "-----> Buildpack compile completed"

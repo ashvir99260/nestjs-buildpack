@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Echo out the default process types
+echo "web: yarn start:prod"

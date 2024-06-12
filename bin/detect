@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Check if there's a package.json file and if it contains "@nestjs/core"
+if [ -f "package.json" ] && grep -q "\"@nestjs/core\"" package.json; then
+  echo "NestJS application detected"
+  exit 0
+else
+  echo "This build pack only supports NestJS applications"
+  exit 1
+fi
